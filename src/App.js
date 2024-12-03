@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import SearchBar from './Components/SeachBar'
+import UserProfile from './Components/UserProfile';
+import useGithubData from './hooks/useGithubData';
+import Navbar from './Components/Navbar';
+import FollowersList from './Components/FollowersList';
+import OverViewbar from './Components/OverViewbar';
+import ChartSection from './Components/ChartSection';
+import Logout from './Components/Logout';
 
-function App() {
+const App = () => {
+  const [username, setUsername] = useState('');
+  const { data, followers, loading, error } = useGithubData(username);
+
+  const handleSearch = (input) => {
+    setUsername(input);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="bg-sky-200">
+        <Navbar data={data || {}} />
+        
+        <Routes>
+          <Route 
+            path="/" 
+            element={
+              <>
+                <SearchBar onSearch={handleSearch} />
+                {loading && <p className='text-center text-white'>Loading...</p>}
+                {error && <p>Error: {error}</p>}
+                {data && <OverViewbar data={data} />}
+                <div className='flex flex-wrap p-5 gap-4 justify-center'>
+                  {data && <UserProfile data={data} />}
+                  {Array.isArray(followers) && followers.length > 0 && <FollowersList followers={followers} />}
+                  <ChartSection username={username} />
+                </div>
+              </>
+            }
+          />
+          <Route path="/logout" element={<Logout />} />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
