@@ -17,6 +17,7 @@ const SearchBar = ({ onSearch }) => {
           type="text"
           placeholder="Enter GitHub username"
           value={input}
+          required
           onChange={(e) => setInput(e.target.value)}
           className="pl-10 p-2 w-full rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />

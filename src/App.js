@@ -29,7 +29,7 @@ const App = () => {
               <>
                 <SearchBar onSearch={handleSearch} />
                 {loading && <p className='text-center text-white'>Loading...</p>}
-                {error && <p>Error: {error}</p>}
+                {error && <p className='text-center text-red-600'>Error: {error}</p>}
                 {data && <OverViewbar data={data} />}
                 <div className='flex flex-wrap p-5 gap-4 justify-center'>
                   {data && <UserProfile data={data} />}
